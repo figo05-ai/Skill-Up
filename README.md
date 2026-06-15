@@ -5,7 +5,7 @@ Skillup is a comprehensive full-stack web application designed to manage employe
 
 ## 🛠️ Tech Stack
 *   **Backend:** Node.js, Express.js
-*   **Database:** MongoDB (or MySQL, adjust if needed)
+*   **Database:** MySQL
 *   **Frontend:** HTML5, CSS3, JavaScript
 *   **Tools:** Git, npm
 
