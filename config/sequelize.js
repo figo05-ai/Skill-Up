@@ -1,17 +1,14 @@
-const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// اكتب بيانات هوستنجر هنا مباشرة بين علامات التنصيص
-const host = '127.0.0.1'; 
-const database = 'u912731784_hrms';      // تأكد من الاسم من هوستنجر
-const username = 'root';      // تأكد من اليوزر من هوستنجر
-const password = '12345678'
+// بيانات الاتصال متوافقة مع إعدادات الـ docker-compose
+const host = 'database'; 
+const database = 'skillup_db'; 
+const username = 'devuser'; 
+const password = 'devpassword'; 
 const port = 3306;
 
 const mysql = require('mysql2/promise');
-
-// ... باقي الكود زي ما هو
 
 const createDatabaseIfNotExists = async () => {
   try {
@@ -24,6 +21,8 @@ const createDatabaseIfNotExists = async () => {
     throw err;
   }
 };
+
+const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(database, username, password, {
   host,
