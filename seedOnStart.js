@@ -8,10 +8,6 @@ const jobTasks = require("./config/jobTasks");
 
 module.exports = async function seedOnStart() {
   try {
-<<<<<<< HEAD
-=======
-await Employee.sequelize.sync();
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
     const adminEmail = process.env.ADMIN_EMAIL || "admin@example.com";
     const adminPasswordRaw = process.env.ADMIN_PASSWORD || null;
 

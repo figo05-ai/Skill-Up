@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const SystemLog = require('../models/SystemLog');
-<<<<<<< HEAD
 const {
   isPrivilegedRole,
   serializeEmployee,
@@ -30,14 +29,6 @@ exports.getEmployees = async (req, res) => {
       attributes: { exclude: ['password'] },
     });
     res.json(serializeEmployees(employees, { privileged: privileged(req) }));
-=======
-
-exports.getEmployees = async (req, res) => {
-  try {
-    // list staff members (role 'staff')
-    const employees = await User.findAll({ where: { role: 'staff' }, attributes: { exclude: ['password'] } });
-    res.json(employees);
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -46,18 +37,12 @@ exports.getEmployees = async (req, res) => {
 
 exports.getEmployee = async (req, res) => {
   try {
-<<<<<<< HEAD
     const employee = await User.findByPk(req.params.id, {
       attributes: { exclude: ['password'] },
     });
     if (!employee) return res.status(404).json({ message: 'Employee not found' });
 
     res.json(serializeEmployee(employee, { privileged: privileged(req) }));
-=======
-    const employee = await User.findByPk(req.params.id, { attributes: { exclude: ['password'] } });
-    if (!employee) return res.status(404).json({ message: 'Employee not found' });
-    res.json(employee);
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -66,7 +51,6 @@ exports.getEmployee = async (req, res) => {
 
 exports.createEmployee = async (req, res) => {
   try {
-<<<<<<< HEAD
     const negativeFieldError = rejectNegativeEmployeeFields(req.body);
     if (negativeFieldError) {
       return res.status(400).json({
@@ -103,23 +87,10 @@ exports.createEmployee = async (req, res) => {
       personalEmail,
       phone,
       password,
-=======
-    const { name, email, personalEmail, phone, password, jobTitle, nationality, joiningDate, department, role, status, attendancePercentage, client, identityNumber, holidays, monthlyWorkHours } = req.body;
-    let existing = await User.findOne({ where: { email } });
-    if (existing) return res.status(400).json({ message: 'Email already in use' });
-
-    const newEmp = await User.create({ 
-      name, 
-      email, 
-      personalEmail,
-      phone,
-      password, 
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
       identityNumber,
       jobTitle,
       nationality,
       joiningDate: joiningDate ? new Date(joiningDate) : null,
-<<<<<<< HEAD
       role: role || 'staff',
       department,
       status: status || 'active',
@@ -127,15 +98,6 @@ exports.createEmployee = async (req, res) => {
       client: client || null,
       holidays: holidays ?? 8,
       monthlyWorkHours: monthlyWorkHours ?? 176,
-=======
-      role: role || 'staff', 
-      department,
-      status: status || 'active',
-      attendancePercentage: attendancePercentage || 0,
-      client: client || null,
-      holidays: holidays || 8,
-      monthlyWorkHours: monthlyWorkHours || 176
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
     });
     const emp = await User.findByPk(newEmp.id, { attributes: { exclude: ['password'] } });
 
@@ -144,7 +106,6 @@ exports.createEmployee = async (req, res) => {
       details: `Created employee: ${name} (${email})`,
       performedBy: req.user ? `${req.user.name} (${req.user.email})` : 'Unknown',
       userId: req.user ? req.user.id : null,
-<<<<<<< HEAD
       ipAddress: req.ip,
     }).catch(console.error);
 
@@ -159,13 +120,6 @@ exports.createEmployee = async (req, res) => {
         message: error.errors.map((e) => e.message).join(', '),
       });
     }
-=======
-      ipAddress: req.ip
-    }).catch(console.error);
-
-    res.status(201).json({ message: 'Employee created', employee: emp });
-  } catch (error) {
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
@@ -173,7 +127,6 @@ exports.createEmployee = async (req, res) => {
 
 exports.updateEmployee = async (req, res) => {
   try {
-<<<<<<< HEAD
     const negativeFieldError = rejectNegativeEmployeeFields(req.body);
     if (negativeFieldError) {
       return res.status(400).json({
@@ -202,10 +155,6 @@ exports.updateEmployee = async (req, res) => {
       'monthlyWorkHours',
       'allowLogin',
     ];
-=======
-    const updates = req.body;
-    const allowed = ['name', 'email', 'personalEmail', 'phone', 'jobTitle', 'nationality', 'joiningDate', 'department', 'role', 'password', 'status', 'attendancePercentage', 'client', 'identityNumber', 'holidays', 'monthlyWorkHours', 'allowLogin'];
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
 
     const employee = await User.findByPk(req.params.id);
     if (!employee) return res.status(404).json({ message: 'Employee not found' });
@@ -225,21 +174,13 @@ exports.updateEmployee = async (req, res) => {
     await employee.save();
     const updated = await User.findByPk(req.params.id, { attributes: { exclude: ['password'] } });
 
-<<<<<<< HEAD
-=======
-    // تسجيل عملية تفعيل/تعطيل الحساب بشكل منفصل
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
     if (updates.allowLogin !== undefined && updates.allowLogin !== previousAllowLogin) {
       await SystemLog.create({
         action: updates.allowLogin ? 'ENABLE_USER' : 'DISABLE_USER',
         details: `${updates.allowLogin ? 'Enabled' : 'Disabled'} account for: ${employee.name} (${employee.email})`,
         performedBy: req.user ? `${req.user.name} (${req.user.email})` : 'Unknown',
         userId: req.user ? req.user.id : null,
-<<<<<<< HEAD
         ipAddress: req.ip,
-=======
-        ipAddress: req.ip
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
       }).catch(console.error);
     }
 
@@ -248,7 +189,6 @@ exports.updateEmployee = async (req, res) => {
       details: `Updated employee: ${employee.name}`,
       performedBy: req.user ? `${req.user.name} (${req.user.email})` : 'Unknown',
       userId: req.user ? req.user.id : null,
-<<<<<<< HEAD
       ipAddress: req.ip,
     }).catch(console.error);
 
@@ -263,13 +203,6 @@ exports.updateEmployee = async (req, res) => {
         message: error.errors.map((e) => e.message).join(', '),
       });
     }
-=======
-      ipAddress: req.ip
-    }).catch(console.error);
-
-    res.json({ message: 'Employee updated', employee: updated });
-  } catch (error) {
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
@@ -287,11 +220,7 @@ exports.deleteEmployee = async (req, res) => {
       details: `Deleted employee: ${empName}`,
       performedBy: req.user ? `${req.user.name} (${req.user.email})` : 'Unknown',
       userId: req.user ? req.user.id : null,
-<<<<<<< HEAD
       ipAddress: req.ip,
-=======
-      ipAddress: req.ip
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
     }).catch(console.error);
 
     res.json({ message: 'Employee deleted' });
@@ -315,12 +244,9 @@ exports.bulkCreateEmployees = async (req, res) => {
         if (!empData.email || !empData.password || !empData.name) {
           throw new Error('Missing required fields (name, email, password)');
         }
-<<<<<<< HEAD
         const negativeError = rejectNegativeEmployeeFields(empData);
         if (negativeError) throw new Error(negativeError);
 
-=======
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
         const existing = await User.findOne({ where: { email: empData.email } });
         if (existing) throw new Error('Email already exists');
 
@@ -338,11 +264,7 @@ exports.bulkCreateEmployees = async (req, res) => {
       details: `Imported ${results.success} employees. Failed: ${results.failed}`,
       performedBy: req.user ? `${req.user.name} (${req.user.email})` : 'Unknown',
       userId: req.user ? req.user.id : null,
-<<<<<<< HEAD
       ipAddress: req.ip,
-=======
-      ipAddress: req.ip
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
     }).catch(console.error);
 
     res.json({ message: 'Bulk import completed', results });
@@ -350,8 +272,4 @@ exports.bulkCreateEmployees = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
