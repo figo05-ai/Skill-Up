@@ -31,6 +31,10 @@
   },
   "devDependencies": {
     "mongodb-memory-server": "^11.0.1",
+<<<<<<< HEAD
+    "nodemon": "^3.1.14"
+=======
     "nodemon": "^3.1.11"
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
   }
 }

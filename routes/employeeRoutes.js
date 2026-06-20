@@ -3,6 +3,14 @@ const { check, validationResult } = require('express-validator');
 const router = express.Router();
 const { Op } = require('sequelize');
 const { protect, isAdmin } = require('../middleware/authMiddleware');
+<<<<<<< HEAD
+const { requireSelfOrAdmin } = require('../middleware/employeeAccessMiddleware');
+const {
+  validatePasswordPolicy,
+  validateNonNegativeEmployeeFields,
+} = require('../middleware/validationMiddleware');
+=======
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
 const employeeController = require('../controllers/employeeController');
 const Employee = require('../models/User');
 
@@ -14,13 +22,24 @@ const validate = (req, res, next) => {
 
 // GET /api/employees/ - list all employees (protected)
 router.get('/', protect, employeeController.getEmployees);
+<<<<<<< HEAD
+// GET /api/employees/:id - staff may only read their own record
+router.get('/:id', protect, requireSelfOrAdmin, employeeController.getEmployee);
+=======
 // GET /api/employees/:id - single employee
 router.get('/:id', protect, employeeController.getEmployee);
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
 // POST /api/employees/ - create (admin only)
 router.post(
   '/',
   protect,
+<<<<<<< HEAD
+  isAdmin,
+  validatePasswordPolicy,
+  validateNonNegativeEmployeeFields,
+=======
   isAdmin, // قصر إضافة الموظفين على المدير فقط
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
   [
     check('name').notEmpty().withMessage('Name is required'),
     check('email').isEmail().withMessage('Valid email is required'),
@@ -107,10 +126,21 @@ router.put(
   '/:id',
   protect,
   isAdmin,
+<<<<<<< HEAD
+  validatePasswordPolicy,
+  validateNonNegativeEmployeeFields,
+=======
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
   [
     check('email').optional().isEmail().withMessage('Valid email is required'),
     check('department').optional().isString().withMessage('Department must be a string'),
     check('role').optional().isIn(['admin', 'staff', 'system_user']).withMessage('Role must be admin, staff or system_user'),
+<<<<<<< HEAD
+    check('holidays').optional().isInt({ min: 0 }).withMessage('Holidays must be a non-negative integer'),
+    check('monthlyWorkHours').optional().isFloat({ min: 0 }).withMessage('Monthly work hours must be a non-negative number'),
+    check('attendancePercentage').optional().isFloat({ min: 0 }).withMessage('Attendance percentage must be a non-negative number'),
+=======
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
   ],
   validate,
   employeeController.updateEmployee

@@ -79,14 +79,23 @@ const connectDB = async () => {
         console.log('Sequelize models synchronized (alter:true)');
         
         // Force specific users to be admins and allow login
+<<<<<<< HEAD
+        const [results] = await sequelize.query("UPDATE employees SET allowLogin = 1, role = 'admin' WHERE email IN ('admin@example.com', 'Alama@gmail.com')");
+        console.log(`Forced admin permissions for ${results ? (results.affectedRows || results.changedRows) : '?'} rows.`);
+=======
        // const [results] = await sequelize.query("UPDATE employees SET allowLogin = 1, role = 'admin' WHERE email IN ('admin@example.com', 'Alama@gmail.com')");
         //console.log(`Forced admin permissions for ${results ? (results.affectedRows || results.changedRows) : '?'} rows.`);
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
 
         // Ensure all admins can login
         await sequelize.query("UPDATE employees SET allowLogin = 1 WHERE role = 'admin'");
         
         // Cleanup: Set client to NULL for employees linked to non-existent clients
+<<<<<<< HEAD
+        await sequelize.query("UPDATE employees SET client = NULL WHERE client IS NOT NULL AND client NOT IN (SELECT id FROM clients)");
+=======
         //await sequelize.query("UPDATE employees SET client = NULL WHERE client IS NOT NULL AND client NOT IN (SELECT id FROM clients)");
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
         console.log('Cleaned up dangling client references in employees table');
 
       } catch (syncErr) {
@@ -104,4 +113,8 @@ const connectDB = async () => {
   }
 };
 
+<<<<<<< HEAD
 module.exports = connectDB;
+=======
+module.exports = connectDB;
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3

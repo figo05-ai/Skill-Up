@@ -30,6 +30,33 @@ app.use(morgan('dev'));
 app.use(helmet({
   contentSecurityPolicy: process.env.NODE_ENV === 'production' ? true : false, //  تفعيل CSP في الإنتاج فقط
 }));
+<<<<<<< HEAD
+// Basic rate limiting (global baseline)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
+
+// Stricter limiter for auth endpoints — 100 requests / 15 minutes / IP
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: {
+    status: 'Error',
+    message: 'Too many requests from this IP, please try again after 15 minutes',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(express.json({ limit: '50mb' }));
+
+// Routes
+app.use('/api/auth', authLimiter, require('./routes/authRoutes'));
+=======
 // Basic rate limiting
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 1000 });
 app.use(limiter);
@@ -38,6 +65,7 @@ app.use(express.json({ limit: '50mb' }));
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
 app.use('/api/employees', require('./routes/employeeRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/attendance', require('./routes/attendanceRoutes'));
@@ -49,7 +77,11 @@ app.use('/api/debug', require('./routes/debugRoutes'));
 // Serve Frontend in Production
 // في وضع الإنتاج، سيقوم السيرفر بتقديم ملفات React من مجلد public
 if (process.env.NODE_ENV === 'production') {
+<<<<<<< HEAD
+  // 1. أمر للسيرفر يستخدم ملفات فولدر dist
+=======
 //   // 1. أمر للسيرفر يستخدم ملفات فولدر dist
+>>>>>>> 90cb0635b46f08d24cbaf6ae3056f35bb8a295f3
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // 2. أمر عشان لو المستخدم عمل Refresh في أي صفحة، يرجعه للموقع (React Router)

@@ -1,0 +1,5 @@
+nohup: ignoring input
+Server running on port 5000
+MongoDB Connected: [host removed]
+Server log (sanitized) - removed specific hostnames and local paths.
+Runtime connection hosts omitted to avoid leaking Atlas hostnames.
