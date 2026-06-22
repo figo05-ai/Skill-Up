@@ -1,6 +1,8 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator');
+const rateLimit = require('express-rate-limit'); 
 const router = express.Router();
+
 const {
   register,
   login,
@@ -14,6 +16,17 @@ const {
 const { protect, isAdmin } = require('../middleware/authMiddleware');
 const { validatePasswordPolicy } = require('../middleware/validationMiddleware');
 
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: {
+    status: 'Error',
+    message: 'Too many requests from this IP, please try again after 15 minutes',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -23,6 +36,7 @@ const validate = (req, res, next) => {
 // Public — no protect/isAdmin middleware on login
 router.post(
   '/login',
+  authLimiter,
   [
     check('email').isEmail().withMessage('Valid email is required'),
     check('password').notEmpty().withMessage('Password is required'),
