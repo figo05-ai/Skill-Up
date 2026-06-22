@@ -1,4 +1,3 @@
-// 1. تشغيل متغيرات البيئة في أول سطر خالص مع تحديد المسار المباشر
 require('dotenv').config({ path: __dirname + '/.env' });
 
 const express = require('express');
@@ -29,29 +28,17 @@ app.use(helmet({
 
 // Global baseline rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 1000,
+  windowMs: 1 * 60 * 1000,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
 });
 app.use(limiter);
 
-// Stricter limiter for auth endpoints — 100 requests / 15 minutes / IP
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: {
-    status: 'Error',
-    message: 'Too many requests from this IP, please try again after 15 minutes',
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
 app.use(express.json({ limit: '50mb' }));
 
 // Routes
-app.use('/api/auth', authLimiter, require('./routes/authRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/employees', require('./routes/employeeRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/attendance', require('./routes/attendanceRoutes'));
